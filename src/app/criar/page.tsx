@@ -1,11 +1,10 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
-import { Wordmark } from "@/components/Wordmark";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useMemo, useState } from "react";
+import { SiteHeader } from "@/components/SiteHeader";
 import { PRODUCT_LABEL } from "@/lib/studio";
-import type { Briefing, ChatTurn, ProductType, StoredProject } from "@/lib/types";
+import { PRODUCT_TYPES, type Briefing, type ChatTurn, type ProductType, type StoredProject } from "@/lib/types";
 import { saveProject } from "@/lib/storage";
 
 const products: { id: ProductType; label: string }[] = [
@@ -36,10 +35,18 @@ const empty: Briefing = {
   prompts: [],
 };
 
-export default function CreatePage() {
+function isProduct(value: string | null): value is ProductType {
+  return PRODUCT_TYPES.includes(value as ProductType);
+}
+
+function CreateFlow() {
   const router = useRouter();
+  const search = useSearchParams();
   const [step, setStep] = useState<"form" | "chat">("form");
-  const [draft, setDraft] = useState<Briefing>(empty);
+  const [draft, setDraft] = useState<Briefing>(() => {
+    const requested = search.get("produto");
+    return isProduct(requested) ? { ...empty, product: requested } : empty;
+  });
   const [chat, setChat] = useState<ChatTurn[]>([{ role: "assistant", text: questions[0] }]);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -87,14 +94,15 @@ export default function CreatePage() {
   }
 
   return (
+    <>
+      <SiteHeader>
+        <ol className="flex items-center gap-2 text-xs text-[#b5a89f]" aria-label="Etapas">
+          <li className={`rounded-full px-3 py-1 ${step === "form" ? "bg-[#e8583f]/15 text-[#e8583f]" : ""}`}>1. Briefing</li>
+          <li className={`rounded-full px-3 py-1 ${step === "chat" ? "bg-[#e8583f]/15 text-[#e8583f]" : ""}`}>2. Chat</li>
+          <li className="hidden rounded-full px-3 py-1 sm:block">3. Preview</li>
+        </ol>
+      </SiteHeader>
     <main className="mx-auto min-h-screen max-w-3xl px-5 py-6">
-      <header className="flex items-center justify-between">
-        <Link href="/">
-          <Wordmark />
-        </Link>
-        <p className="text-sm text-[#b5a89f]">{step === "form" ? "Briefing" : "Chat"}</p>
-      </header>
-
       {step === "form" ? (
         <form
           className="mt-8 space-y-4"
@@ -175,6 +183,15 @@ export default function CreatePage() {
         </section>
       )}
     </main>
+    </>
+  );
+}
+
+export default function CreatePage() {
+  return (
+    <Suspense fallback={<p className="px-5 py-10 text-sm text-[#b5a89f]">Abrindo briefing...</p>}>
+      <CreateFlow />
+    </Suspense>
   );
 }
 

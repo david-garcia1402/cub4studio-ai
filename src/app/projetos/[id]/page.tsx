@@ -2,27 +2,27 @@
 
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useMemo, useState, useSyncExternalStore } from "react";
 import { ContactModal } from "@/components/ContactModal";
 import { DeliveryBoard } from "@/components/DeliveryBoard";
 import { SitePreview } from "@/components/SitePreview";
-import { Wordmark } from "@/components/Wordmark";
-import { loadProject, updateProject } from "@/lib/storage";
-import type { StoredProject, WebsiteSchema } from "@/lib/types";
+import { SiteHeader } from "@/components/SiteHeader";
+import { findProject, readProjectsSnapshot, subscribeProjects, updateProject } from "@/lib/storage";
+import type { WebsiteSchema } from "@/lib/types";
+
+const serverSnapshot = () => null;
 
 function ProjectScreen() {
   const params = useParams<{ id: string }>();
   const search = useSearchParams();
-  const [project, setProject] = useState<StoredProject | null | undefined>(undefined);
-  const [open, setOpen] = useState(false);
+  const snapshot = useSyncExternalStore(subscribeProjects, readProjectsSnapshot, serverSnapshot);
+  const project = useMemo(
+    () => (snapshot === null ? undefined : findProject(snapshot, params.id)),
+    [snapshot, params.id],
+  );
+  const [open, setOpen] = useState(() => search.get("novo") === "1");
   const [instruction, setInstruction] = useState("");
   const [note, setNote] = useState("");
-
-  useEffect(() => {
-    const found = loadProject(params.id);
-    setProject(found);
-    if (found && search.get("novo") === "1") setOpen(true);
-  }, [params.id, search]);
 
   async function adjust() {
     if (!project || !instruction.trim()) return;
@@ -36,9 +36,7 @@ function ProjectScreen() {
       setNote(data.error ?? "Não consegui ajustar.");
       return;
     }
-    const next = { ...project, schema: data.schema };
-    updateProject(next);
-    setProject(next);
+    updateProject({ ...project, schema: data.schema });
     setInstruction("");
     setNote("Ajuste aplicado no preview.");
   }
@@ -58,15 +56,13 @@ function ProjectScreen() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-6">
-      <header className="mb-6 flex items-center justify-between gap-3">
-        <Link href="/">
-          <Wordmark />
-        </Link>
+    <>
+      <SiteHeader>
         <button type="button" onClick={() => setOpen(true)} className="rounded-full bg-[#e8583f] px-4 py-2 text-sm font-semibold text-white">
           Falar com a cub4Studio
         </button>
-      </header>
+      </SiteHeader>
+    <main className="mx-auto max-w-5xl px-4 py-6">
       <p className="mb-4 text-sm text-[#b5a89f]">{project.schema.seo.title}</p>
       {project.schema.sections.length > 0 ? <SitePreview schema={project.schema} /> : <DeliveryBoard schema={project.schema} />}
       <section className="mt-6 rounded-3xl border border-white/10 p-4">
@@ -87,6 +83,7 @@ function ProjectScreen() {
       </section>
       <ContactModal briefing={project.briefing} open={open} onClose={() => setOpen(false)} />
     </main>
+    </>
   );
 }
 

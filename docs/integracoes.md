@@ -11,7 +11,7 @@ Enquanto `AI_GENERATION_ENABLED` não for `true`, o app monta o preview no servi
 3. Defina `AI_MODEL` se quiser outro modelo. O padrão previsto é `gpt-4o-mini`.
 4. Só então ligue `AI_GENERATION_ENABLED=true`.
 5. A rota é `POST /api/ai/generate`. A chave não pode aparecer no browser.
-6. Hoje, com a flag ligada, a rota responde 503 de propósito: o conector do provedor ainda não está plugado. Isso evita gastar sem o contrato de schema pronto.
+6. Com a flag ligada, `AiProvider` chama o modelo e só aceita JSON de seções conhecidas. Resposta inválida vira erro 503 e o preview local não é trocado por conteúdo solto.
 
 ## 2. Mercado Pago (fase futura)
 

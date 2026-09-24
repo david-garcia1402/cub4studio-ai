@@ -39,7 +39,7 @@ export type Theme = {
 export type Section =
   | {
       type: "navbar";
-      variant: "solid";
+      variant: "solid" | "minimal";
       props: { businessName: string; city: string };
     }
   | {
@@ -55,33 +55,43 @@ export type Section =
     }
   | {
       type: "services";
-      variant: "cards";
+      variant: "cards" | "list";
       props: { title: string; items: { title: string; text: string }[] };
     }
   | {
       type: "about";
-      variant: "split";
+      variant: "split" | "stack";
       props: { title: string; text: string; points: string[] };
     }
   | {
       type: "proof";
-      variant: "quotes";
+      variant: "quotes" | "strip";
       props: { title: string; note: string; quotes: string[] };
     }
   | {
       type: "faq";
-      variant: "list";
+      variant: "list" | "compact";
       props: { title: string; items: { q: string; a: string }[] };
     }
   | {
       type: "cta";
-      variant: "band";
+      variant: "band" | "inline";
       props: { title: string; text: string; cta: string; whatsapp: string };
     }
   | {
       type: "footer";
-      variant: "simple";
+      variant: "simple" | "stacked";
       props: { businessName: string; city: string };
+    }
+  | {
+      type: "gallery";
+      variant: "grid" | "row";
+      props: { title: string; items: string[] };
+    }
+  | {
+      type: "contact";
+      variant: "card" | "line";
+      props: { title: string; text: string; whatsapp: string; city: string };
     };
 
 export type DeliveryPiece = {

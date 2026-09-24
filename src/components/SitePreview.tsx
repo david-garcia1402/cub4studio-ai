@@ -134,6 +134,38 @@ export function SitePreview({ schema }: { schema: WebsiteSchema }) {
             </section>
           );
         }
+        if (section.type === "gallery") {
+          const row = section.variant === "row";
+          return (
+            <section key={index} className="px-5 py-10 sm:px-8">
+              <h3 className="font-display text-2xl">{section.props.title}</h3>
+              <div className={`mt-4 grid gap-3 ${row ? "sm:grid-cols-3" : "grid-cols-2"}`}>
+                {section.props.items.map((item) => (
+                  <div key={item} className="flex aspect-[4/3] items-end rounded-2xl p-4" style={{ background: theme.surface }}>
+                    <span className="text-sm font-semibold">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          );
+        }
+        if (section.type === "contact") {
+          const href = section.props.whatsapp ? waLink(section.props.whatsapp, section.props.title) : null;
+          return (
+            <section key={index} className="px-5 py-8 sm:px-8">
+              <div className="rounded-3xl p-5" style={{ background: theme.surface }}>
+                <h3 className="font-display text-2xl">{section.props.title}</h3>
+                <p className="mt-2 text-sm" style={{ color: theme.muted }}>{section.props.text}</p>
+                <p className="mt-2 text-sm">{section.props.city}</p>
+                {href ? (
+                  <a className="mt-4 inline-flex rounded-full px-4 py-2 text-sm font-semibold" style={{ background: theme.accent, color: "#1a1210" }} href={href} target="_blank" rel="noopener noreferrer">
+                    WhatsApp
+                  </a>
+                ) : null}
+              </div>
+            </section>
+          );
+        }
         if (section.type === "cta") {
           return (
             <section key={index} className="mx-5 mb-8 rounded-3xl px-5 py-8 sm:mx-8" style={{ background: theme.accent, color: "#1a1210" }}>
@@ -145,8 +177,9 @@ export function SitePreview({ schema }: { schema: WebsiteSchema }) {
             </section>
           );
         }
+        const stacked = section.variant === "stacked";
         return (
-          <footer key={index} className="flex items-center justify-between px-5 py-6 text-sm sm:px-8" style={{ color: theme.muted }}>
+          <footer key={index} className={`px-5 py-6 text-sm sm:px-8 ${stacked ? "space-y-1" : "flex items-center justify-between"}`} style={{ color: theme.muted }}>
             <span>{section.props.businessName}</span>
             <span>{section.props.city}</span>
           </footer>

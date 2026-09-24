@@ -133,6 +133,14 @@ function landingSections(briefing: Briefing): Section[] {
       },
     },
     {
+      type: "gallery",
+      variant: editorial ? "row" : "grid",
+      props: {
+        title: "Galeria",
+        items: serviceItems(briefing).map((item) => item.title),
+      },
+    },
+    {
       type: "faq",
       variant: "list",
       props: {
@@ -157,7 +165,17 @@ function landingSections(briefing: Briefing): Section[] {
         whatsapp: phone,
       },
     },
-    { type: "footer", variant: "simple", props: { businessName: name, city } },
+    {
+      type: "contact",
+      variant: "card",
+      props: {
+        title: `Falar com ${name}`,
+        text: phone ? "O botão abre o WhatsApp do negócio." : "A cub4Studio coloca o número certo antes de publicar.",
+        whatsapp: phone,
+        city,
+      },
+    },
+    { type: "footer", variant: editorial ? "stacked" : "simple", props: { businessName: name, city } },
   ];
 }
 

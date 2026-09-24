@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
+import { createAiProvider } from "@/lib/ai-provider";
 import { parseBriefing } from "@/lib/briefing";
-import { composeProject } from "@/lib/compose";
 
 export const runtime = "nodejs";
 
@@ -49,24 +49,21 @@ export async function POST(request: Request) {
       ? record.idempotencyKey
       : crypto.randomUUID();
 
-  const enabled = process.env.AI_GENERATION_ENABLED === "true" && Boolean(process.env.AI_API_KEY);
-  if (enabled) {
-    return NextResponse.json(
-      {
-        error:
-          "A geração paga está marcada como ligada, mas o provedor ainda não foi conectado. Desligue AI_GENERATION_ENABLED para usar o compositor local.",
+  try {
+    const result = await createAiProvider().compose(briefing, id);
+    return NextResponse.json({
+      source: result.source,
+      project: {
+        id,
+        briefing,
+        schema: result.schema,
+        createdAt: new Date().toISOString(),
       },
+    });
+  } catch {
+    return NextResponse.json(
+      { error: "O provedor de IA não respondeu um projeto válido. Nada foi cobrado." },
       { status: 503 },
     );
   }
-
-  return NextResponse.json({
-    source: "local",
-    project: {
-      id,
-      briefing,
-      schema: composeProject(briefing, id),
-      createdAt: new Date().toISOString(),
-    },
-  });
 }

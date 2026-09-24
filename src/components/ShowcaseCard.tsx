@@ -34,13 +34,13 @@ function Cover({ product, palette }: { product: ProductType; palette: [string, s
   if (product === "criativo") {
     return (
       <div className={base} style={bg}>
-        <div className="absolute left-1/2 top-1/2 size-28 -translate-x-1/2 -translate-y-1/2 rotate-[-8deg] rounded-xl bg-ink/80 p-3 ring-1 ring-white/10 transition-transform duration-500 group-hover:rotate-[-4deg]">
+        <div className="absolute left-1/2 top-1/2 size-28 -translate-x-[30%] -translate-y-[62%] rotate-[9deg] rounded-xl bg-white/20 ring-1 ring-white/30 transition-transform duration-500 group-hover:translate-x-[-20%] group-hover:rotate-[12deg]" />
+        <div className="absolute left-1/2 top-1/2 size-28 -translate-x-[70%] -translate-y-[38%] rotate-[-8deg] rounded-xl bg-ink/85 p-3 shadow-xl ring-1 ring-white/10 transition-transform duration-500 group-hover:rotate-[-4deg]">
           <div className="h-2 w-10 rounded bg-white/40" />
           <div className="mt-6 h-3 w-20 rounded bg-white/90" />
           <div className="mt-1.5 h-3 w-14 rounded bg-white/90" />
           <div className="mt-3 h-4 w-12 rounded-full" style={{ background: a }} />
         </div>
-        <div className="absolute left-1/2 top-1/2 size-28 -translate-x-[35%] -translate-y-[60%] rotate-[9deg] rounded-xl bg-white/15 ring-1 ring-white/20 backdrop-blur-sm transition-transform duration-500 group-hover:translate-x-[-25%]" />
       </div>
     );
   }
@@ -86,9 +86,9 @@ function Cover({ product, palette }: { product: ProductType; palette: [string, s
       <svg className="absolute inset-0 size-full" viewBox="0 0 200 150" fill="none" aria-hidden="true">
         <path d="M40 40 C 90 40, 90 75, 140 75 M40 110 C 90 110, 90 75, 140 75" stroke="rgba(255,255,255,0.45)" strokeWidth="2" strokeDasharray="4 4" />
       </svg>
-      <div className={`absolute left-6 top-8 flex h-10 w-16 items-center justify-center text-[10px] font-semibold text-ink ${glass}`}>Anúncio</div>
-      <div className={`absolute left-6 bottom-8 flex h-10 w-16 items-center justify-center text-[10px] font-semibold text-ink ${glass}`}>Form</div>
-      <div className="absolute left-[128px] top-1/2 flex h-12 w-14 -translate-y-1/2 items-center justify-center rounded-lg bg-ink text-[10px] font-semibold text-white ring-1 ring-white/20 transition-transform duration-500 group-hover:translate-x-1">
+      <div className={`absolute left-[10%] top-[16%] flex h-10 w-[26%] items-center justify-center text-[10px] font-semibold text-ink ${glass}`}>Anúncio</div>
+      <div className={`absolute left-[10%] bottom-[16%] flex h-10 w-[26%] items-center justify-center text-[10px] font-semibold text-ink ${glass}`}>Form</div>
+      <div className="absolute left-[62%] top-1/2 flex h-12 w-[26%] -translate-y-1/2 items-center justify-center rounded-lg bg-ink text-[10px] font-semibold text-white ring-1 ring-white/20 transition-transform duration-500 group-hover:translate-x-1">
         Whats
       </div>
     </div>

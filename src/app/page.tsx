@@ -22,7 +22,7 @@ const offers = [
   },
   { title: "Criativos", text: "Feed, stories e anúncio no mesmo sistema visual.", span: "", tone: "from-gold/20 to-transparent" },
   { title: "Foto de marca", text: "Direção de still para produto e ambiente.", span: "", tone: "from-white/10 to-transparent" },
-  { title: "Reel", text: "Gancho, meio e CTA com corte no ritmo.", span: "", tone: "from-[#7c4dff]/25 to-transparent" },
+  { title: "Reel", text: "Gancho, meio e CTA com corte no ritmo. Roteiro pronto para gravar no celular.", span: "lg:col-span-2", tone: "from-[#7c4dff]/25 to-transparent" },
   {
     title: "Automação",
     text: "Do anúncio ao WhatsApp com resposta pronta e passagem para quem atende.",
@@ -36,7 +36,7 @@ const marquee = ["Landing page", "Criativos", "Foto de marca", "Reel", "Automaç
 const proofs = [
   ["5", "formatos de projeto"],
   ["~3 min", "de briefing"],
-  ["0", "cadastro para ver o preview"],
+  ["0", "cadastro exigido"],
   ["1", "conversa para fechar"],
 ];
 
